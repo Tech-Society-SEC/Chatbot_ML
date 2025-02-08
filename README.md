@@ -1,132 +1,179 @@
 # Chatbot - ML
 
-### Welcome to the Chatbot - ML Repository!
+Welcome to the Chatbot - ML Repository!
 
 This repository contains a machine learning project designed to process PDF documents, extract text, split it into smaller chunks, generate embeddings using Google’s Generative AI, and store them in a FAISS vector store for fast retrieval. The system enables question answering based on the contents of the document.
 
-### Features
-- **PDF Parsing**: Extract text from PDF files using PyMuPDF (fitz).
-- **Text Splitting**: Split large text documents into smaller, manageable chunks using `RecursiveCharacterTextSplitter` from Langchain.
-- **Embeddings**: Generate text embeddings using Google’s Generative AI, enabling semantic search.
-- **Vector Store**: Store embeddings in a FAISS vector store for efficient similarity-based retrieval.
-- **Question Answering**: Answer user queries based on the document's content using Langchain’s question-answering chain.
+## Features
 
-### Progress So Far
-- **Core Functionality Implemented**:
-  - PDF text extraction is fully functional using PyMuPDF.
-  - Text splitting using Langchain's `RecursiveCharacterTextSplitter` works seamlessly.
-  - Embedding generation is integrated with Google’s Generative AI API and is fully operational.
-  - Vector storage and retrieval using FAISS are implemented and tested.
-  - Basic question-answering functionality using Langchain’s chain is working.
+- **PDF Parsing:** Extract text from PDF files using PyMuPDF (fitz).
+- **Text Splitting:** Split large text documents into smaller, manageable chunks using `RecursiveCharacterTextSplitter` from Langchain.
+- **Embeddings:** Generate text embeddings using Google’s Generative AI, enabling semantic search.
+- **Vector Store:** Store embeddings in a FAISS vector store for efficient similarity-based retrieval.
+- **Question Answering:** Answer user queries based on the document's content using Langchain’s question-answering chain.
 
-- **Optimizations**:
-  - Intel’s Scikit-learn extension is integrated for enhanced performance.
-  - Environment setup instructions are provided for easy replication.
+## Progress So Far
 
+### Core Functionality Implemented:
+- **PDF Text Extraction:**  
+  PDF text extraction is fully functional using PyMuPDF.
+  
+- **Text Splitting:**  
+  Text splitting with Langchain's `RecursiveCharacterTextSplitter` operates seamlessly.
+  
+- **Embedding Generation:**  
+  Integration with Google’s Generative AI API for embedding generation is fully operational.
+  
+- **Vector Storage & Retrieval:**  
+  Embeddings are stored in a FAISS vector store, enabling fast similarity-based retrieval.
+  
+- **Question Answering:**  
+  Basic question-answering using Langchain’s QA chain is successfully working.
 
-### Code Functionality
-The project’s main functionalities include:
+### Recent Updates & Enhancements:
+- **Enhanced Error Handling:**  
+  Added error checks for invalid PDF inputs and missing API keys to improve reliability.
+  
+- **Improved Code Modularity:**  
+  Refactored code into modular components to simplify maintenance and future expansion.
+  
+- **Unit Testing:**  
+  Initial unit tests for key functionalities (e.g., PDF extraction and text splitting) have been implemented.
+  
+- **Performance Optimizations:**  
+  Integrated Intel’s Scikit-learn extension to boost performance.
+  
+- **Documentation and Comments:**  
+  Expanded inline comments and documentation have been added to facilitate onboarding and troubleshooting.
 
-1. **Extracting Text from PDFs**:
-   - Load a PDF file and extract text content using PyMuPDF.
-   - Example:
-     ```python
-     import fitz
-     pdf = fitz.open("document.pdf")
-     text = "\n".join(page.get_text() for page in pdf)
-     ```
+## Code Functionality Explained
 
-2. **Splitting Text**:
-   - Split extracted text into smaller chunks for better embedding generation.
-   - Example:
-     ```python
-     from langchain.text_splitter import RecursiveCharacterTextSplitter
-     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-     chunks = text_splitter.split_text(text)
-     ```
+The project’s main functionalities are structured into several distinct components:
 
-3. **Generating Embeddings**:
-   - Convert text chunks into embeddings using Google’s Generative AI.
-   - Example:
-     ```python
-     from langchain_google_genai import GoogleGenerativeAIEmbeddings
-     embeddings = GoogleGenerativeAIEmbeddings(api_key="YOUR_API_KEY")
-     vector_store = FAISS.from_texts(chunks, embeddings)
-     ```
+### 1. Extracting Text from PDFs
+- **Purpose:**  
+  Load a PDF file and extract its text content.
+  
+- **Implementation:**  
+  Utilizes PyMuPDF (fitz) to open a PDF and iterate through each page, concatenating the text.
+  
+- **Example Code:**
+  ```python
+  import fitz
+  pdf = fitz.open("document.pdf")
+  text = "\n".join(page.get_text() for page in pdf)
+  ```
 
-4. **Storing Embeddings**:
-   - Store the generated embeddings in a FAISS vector database for efficient retrieval.
+### 2. Splitting Text into Chunks
+- **Purpose:**  
+  Divide large text documents into smaller, more manageable chunks to enhance embedding generation.
+  
+- **Implementation:**  
+  Uses Langchain's `RecursiveCharacterTextSplitter` with configurable chunk size and overlap.
+  
+- **Example Code:**
+  ```python
+  from langchain.text_splitter import RecursiveCharacterTextSplitter
+  text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+  chunks = text_splitter.split_text(text)
+  ```
 
-5. **Question Answering**:
-   - Use the stored embeddings to answer user queries based on the document content.
-   - Example:
-     ```python
-     from langchain.chains import load_qa_chain
-     qa_chain = load_qa_chain(ChatGoogleGenerativeAI(), chain_type="map_reduce")
-     result = qa_chain.run(input_document=document, question="Your question here")
-     ```
+### 3. Generating Text Embeddings
+- **Purpose:**  
+  Transform text chunks into numerical embeddings that represent semantic content.
+  
+- **Implementation:**  
+  Integrates with Google’s Generative AI via Langchain's Google Generative AI embeddings module.
+  
+- **Example Code:**
+  ```python
+  from langchain_google_genai import GoogleGenerativeAIEmbeddings
+  embeddings = GoogleGenerativeAIEmbeddings(api_key="YOUR_API_KEY")
+  vector_store = FAISS.from_texts(chunks, embeddings)
+  ```
 
-### Installation
+### 4. Storing and Retrieving Embeddings
+- **Purpose:**  
+  Efficiently store the generated embeddings and retrieve them based on similarity.
+  
+- **Implementation:**  
+  Utilizes FAISS as the vector store, enabling quick similarity-based searches.
+  
+- **Functionality:**  
+  When a user poses a query, the system compares the query’s embedding to those stored, retrieving the most relevant document sections.
 
-To set up the project, follow the steps below:
+### 5. Question Answering
+- **Purpose:**  
+  Provide answers to user queries by leveraging the stored embeddings and document content.
+  
+- **Implementation:**  
+  Employs Langchain’s question-answering chain (using methods like map-reduce) to generate answers.
+  
+- **Example Code:**
+  ```python
+  from langchain.chains import load_qa_chain
+  qa_chain = load_qa_chain(ChatGoogleGenerativeAI(), chain_type="map_reduce")
+  result = qa_chain.run(input_document=document, question="Your question here")
+  ```
 
-1. Clone the repository:
+## Installation
+
+To set up the project, follow these steps:
+
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/Tech-Society-SEC/Chatbot_ML.git
    ```
 
-2. Navigate to the project directory:
+2. **Navigate to the project directory:**
    ```bash
    cd Chatbot_ML
    ```
 
-3. Install the necessary libraries:
+3. **Install the necessary libraries:**
    ```bash
    pip install scikit-learn-intelex pymupdf langchain-google-genai langchain-community python-dotenv faiss-cpu
    ```
 
-4. Mount Google Drive to access your files:
+4. **Mount Google Drive (if needed):**
    ```python
    from google.colab import drive
    drive.mount('/content/drive')
    ```
 
-5. Set up the Google API key by creating a `.env` file and storing your API key:
+5. **Configure the API Key:**  
+   Create a `.env` file and store your Google API key:
    ```python
    from dotenv import load_dotenv
    load_dotenv()
    api_key = os.getenv('GOOGLE_API_KEY')
    ```
 
-6. Optimize scikit-learn for better performance:
+6. **Optimize scikit-learn:**
    ```python
    from sklearnex import patch_sklearn
    patch_sklearn()
    ```
 
-### Beginner-Friendly Issues
-We welcome contributions! Below are some beginner-friendly issues to help you get started:
+## Beginner-Friendly Issues
 
-1. **Improve Documentation**:
-   - Add more detailed comments in the code to explain the purpose of each section.
-   - Expand the README with examples of common errors and troubleshooting tips.
-   
-2. **Add Unit Tests**:
-   - Write unit tests for each functionality (e.g., text splitting, embedding generation).
+We welcome contributions! Here are some beginner-friendly tasks:
 
-3. **Enhance Error Handling**:
-   - Identify potential points of failure (e.g., invalid PDF, missing API key).
-   - Add meaningful error messages and fallback mechanisms.
+- **Improve Documentation:**  
+  Enhance inline comments and expand the README with more examples and troubleshooting tips.
 
-4. **Create a Simple CLI**:
-   - Develop a command-line interface for running the system end-to-end.
-   - Include options for loading a PDF, asking a question, and displaying results.
+- **Add Unit Tests:**  
+  Develop tests for functionalities like text extraction, text splitting, and embedding generation.
 
-5. **Optimize Chunk Size**:
-   - Experiment with different chunk sizes for text splitting.
-   - Evaluate how it impacts embedding quality and performance.
+- **Enhance Error Handling:**  
+  Implement checks and meaningful error messages for cases such as invalid PDFs or absent API keys.
 
+- **Create a Simple CLI:**  
+  Build a command-line interface for loading PDFs, submitting queries, and displaying results.
 
-### Repository URL
+- **Optimize Chunk Size:**  
+  Experiment with different text chunk sizes to find the optimal balance for embedding quality and performance.
 
-For more details and to access the code, visit the GitHub Repository: [https://github.com/Tech-Society-SEC/Chatbot_ML](https://github.com/Tech-Society-SEC/Chatbot_ML)
+## Repository URL
+
+For more details and to access the code, visit the [GitHub Repository](https://github.com/Tech-Society-SEC/Chatbot_ML).
